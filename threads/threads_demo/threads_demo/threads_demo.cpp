@@ -43,10 +43,15 @@ int main()
 
     auto StartTime = high_resolution_clock::now();
 
-    FindOdd(start, end);
-    FindEven(start, end);
+    std::thread t1(FindOdd, start, end);
+    std::thread t2(FindEven, start, end);
 
+    t1.join();
+    t2.join();
+ 
     auto StopTime = high_resolution_clock::now();
+
+
 
     auto duration = duration_cast<microseconds>(StopTime - StartTime);
 
@@ -56,5 +61,5 @@ int main()
     cout << duration.count() / 1000000 << endl;
 
     return 0;
-}s
+}
 
