@@ -5,12 +5,13 @@
 using namespace std;
 #pragma optimize("", off)
 
-template<typename T, typename U>
-bool Equals(T lhs, U rhs)
+template<typename T>
+bool Equals(T lhs, T rhs)
 {
     return lhs == rhs;
 }
 
+//above Template Specilized for the float.
 template<>
 bool Equals<float>(float lhs, float rhs)
 {
