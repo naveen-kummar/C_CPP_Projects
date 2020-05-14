@@ -2,21 +2,30 @@
 //
 
 #include <cmath>
+#include <type_traits>
 using namespace std;
 #pragma optimize("", off)
 
+//tag-dispatch
 template<typename T>
-bool Equals(T lhs, T rhs)
+bool Equals(T lhs, T rhs, true_type) //floating
+{
+    return true;
+}
+
+template<typename T>
+bool Equals(T lhs, T rhs, false_type) //non-floating
 {
     return lhs == rhs;
 }
 
-//above Template Specilized for the float.
-template<>
-bool Equals<float>(float lhs, float rhs)
+template<typename T>
+bool Equals(T lhs, T rhs)
 {
-    return true;
+    return Equals(lhs, rhs, conditional_t<is_floating_point<T>::value, true_type, false_type>{});
 }
+
+
 
 
 int main()
