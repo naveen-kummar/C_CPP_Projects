@@ -36,3 +36,4 @@
 *.filters
 *.vs
 *.exe
+*/Debug/*
