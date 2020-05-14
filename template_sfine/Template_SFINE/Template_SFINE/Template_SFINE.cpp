@@ -14,7 +14,7 @@ bool Equals(T lhs, T rhs, enable_if_t<is_floating_point<T>::value>* = nullptr) /
 }
 
 template<typename T>
-bool Equals(T lhs, T rhs, enable_if_t<!is_floating_point<T>::value>* = nullptr) //non-floating
+bool Equals(T lhs, T rhs) //non-floating
 {
     return lhs == rhs;
 }
@@ -23,10 +23,10 @@ bool Equals(T lhs, T rhs, enable_if_t<!is_floating_point<T>::value>* = nullptr) 
 int main()
 {
     Equals(1, 1);
-    Equals(1.f, 1.f);
-    Equals(1., 1.);
+    //Equals(1.f, 1.f); - float type will have multiple instance of 'Equals' defined
+    //Equals(1., 1.); - float type will have multiple instance of 'Equals' defined
     Equals(1u, 1u);
-    bool b = Equals(0.42f - 0.4f, 0.02f);
+    //bool b = Equals(0.42f - 0.4f, 0.02f); - float type will have multiple instance of 'Equals' defined
     return 0;
 }
 
