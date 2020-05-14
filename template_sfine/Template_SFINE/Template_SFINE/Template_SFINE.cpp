@@ -20,13 +20,9 @@ bool Equals(T lhs, T rhs, enable_if_t<!is_floating_point<T>::value>* = nullptr) 
 }
 
 
-
-
-
 int main()
 {
-    int* ptr = nullptr;
-    Equals(1, 1, nullptr);
+    Equals(1, 1);
     Equals(1.f, 1.f);
     Equals(1., 1.);
     Equals(1u, 1u);
