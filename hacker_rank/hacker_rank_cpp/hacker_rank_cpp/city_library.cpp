@@ -68,6 +68,7 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
     int n_paths = 0;
     vector<int> unique_src_cities;
     vector<int> unique_cities;
+    int lib_in_select_cities = 0;
     for (auto path : circles)
     {
         if (std::find(std::begin(unique_src_cities), std::end(unique_src_cities), path[0]) == std::end(unique_src_cities))
@@ -77,18 +78,31 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
 
         }
 
-        for (auto city : path)
+        if (unique_cities.size() < n)
         {
-            if (std::find(std::begin(unique_cities), std::end(unique_cities), city) == std::end(unique_cities))
+            for (auto city : path)
             {
-                unique_cities.push_back(city);
+                if (std::find(std::begin(unique_cities), std::end(unique_cities), city) == std::end(unique_cities))
+                {
+                    unique_cities.push_back(city);
+                }
+
+                if (unique_cities.size() == n)
+                {
+                    break;
+                }
             }
         }
 
         n_paths += path.size() - 1;
-    }
 
-    int lib_in_select_cities = (n_lib * c_lib) + (n_paths * c_road) + ((n - unique_cities.size()) * c_lib);
+        lib_in_select_cities = (n_lib * c_lib) + (n_paths * c_road) + ((n - unique_cities.size()) * c_lib);
+
+        if (lib_in_select_cities > lib_in_all_cities)
+        {
+            break;
+        }
+    }
 
     return (lib_in_select_cities < lib_in_all_cities) ? lib_in_select_cities : lib_in_all_cities;
 
