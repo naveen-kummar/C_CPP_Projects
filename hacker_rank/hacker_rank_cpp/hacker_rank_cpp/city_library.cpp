@@ -5,6 +5,8 @@
 //#include <bits/stdc++.h>
 #include <iterator>
 #include <vector>
+#include <map>
+#include <set>
 
 using namespace std;
 
@@ -15,22 +17,21 @@ vector<string> split_string(string);
 // Complete the roadsAndLibraries function below.
 long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities) {
 
-    vector<vector<int>> circles;
+    map<int, std::set<int>> circles;
 
     int number_of_roads = cities.size();
 
     for (auto road : cities)
     {
-        vector<int> dst_list;
+        circles[road[0]].emplace(road[0]);
+        circles[road[0]].emplace(road[1]);
         int current_src = road[0];
         int current_dst = road[1];
 
-        dst_list.push_back(current_src);
-        dst_list.push_back(current_dst);
 
         auto dst_iter = std::find_if(std::begin(cities), std::end(cities), [&current_dst](auto v)
             {return (current_dst == v[0]); });
-
+#if 1
         //Find is above src is part of circle
         while ((current_src != current_dst) &&
             (dst_iter != std::end(cities)))
@@ -38,26 +39,26 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
             current_src = (*dst_iter)[0];
             current_dst = (*dst_iter)[1];
 
-            if (std::find(std::begin(dst_list), std::end(dst_list), current_dst) != std::end(dst_list))
+            if (std::find(std::begin(circles[road[0]]), std::end(circles[road[0]]), current_dst) != std::end(circles[road[0]]))
             {
                 break;
             }
             else
             {
-                dst_list.push_back(current_dst);
+                circles[road[0]].insert(current_dst);
             }
 
         }
+#endif
+        //std::sort(std::begin(dst_list), std::end(dst_list));
 
-        std::sort(std::begin(dst_list), std::end(dst_list));
+        //if (std::find_if(std::begin(circles), std::end(circles), [&dst_list](vector<int> v)
+        //    {return v == dst_list; }) == std::end(circles))
+        //{
+        //    circles.push_back(dst_list);
+        //}
 
-        if (std::find_if(std::begin(circles), std::end(circles), [&dst_list](vector<int> v)
-            {return v == dst_list; }) == std::end(circles))
-        {
-            circles.push_back(dst_list);
-        }
-
-        dst_list.clear();
+        //dst_list.clear();
 
     }
 
@@ -66,25 +67,26 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
 
     int n_lib = 0;
     int n_paths = 0;
-    vector<int> unique_src_cities;
-    vector<int> unique_cities;
+    set<int> unique_src_cities;
+    set<int> unique_cities;
     int lib_in_select_cities = 0;
+#if 1
     for (auto path : circles)
     {
-        if (std::find(std::begin(unique_src_cities), std::end(unique_src_cities), path[0]) == std::end(unique_src_cities))
+        if (std::find(std::begin(unique_src_cities), std::end(unique_src_cities), path.first) == std::end(unique_src_cities))
         {
-            unique_src_cities.push_back(path[0]);
+            unique_src_cities.insert(path.first);
             ++n_lib;
 
         }
 
         if (unique_cities.size() < n)
         {
-            for (auto city : path)
+            for (auto city : path.second)
             {
                 if (std::find(std::begin(unique_cities), std::end(unique_cities), city) == std::end(unique_cities))
                 {
-                    unique_cities.push_back(city);
+                    unique_cities.insert(city);
                 }
 
                 if (unique_cities.size() == n)
@@ -94,7 +96,7 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
             }
         }
 
-        n_paths += path.size() - 1;
+        n_paths += path.second.size() - 1;
 
         lib_in_select_cities = (n_lib * c_lib) + (n_paths * c_road) + ((n - unique_cities.size()) * c_lib);
 
@@ -103,6 +105,11 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
             break;
         }
     }
+#endif
+
+    std::cout << "Number of libs:  " << n_lib << std::endl;
+    std::cout << "Number of n_paths:  " << n_paths << std::endl;
+    std::cout << "Number of left out city:  " << ((n - unique_cities.size()) << std::endl;
 
     return (lib_in_select_cities < lib_in_all_cities) ? lib_in_select_cities : lib_in_all_cities;
 
