@@ -5,6 +5,7 @@
 #include <thread>
 #include <chrono>
 #include <algorithm>
+#include <future>
 
 using namespace std;
 using namespace std::chrono;
@@ -25,7 +26,7 @@ void FindEven(ull start, ull end)
     }
 }
 
-void FindOdd(ull start, ull end)
+void FindOdd(std::promise<ull>&& OddSumPromise  ,ull start, ull end)
 {
     for (ull i = start; i <= end; i++)
     {
@@ -34,6 +35,8 @@ void FindOdd(ull start, ull end)
             odd_sum++;
         }
     }
+
+    OddSumPromise.set_value(odd_sum);
 }
 
 int main()
@@ -41,13 +44,18 @@ int main()
     ull start{ 0 };
     ull end{ 1900000000 };
 
+    std::promise<ull> OddSum;
+    std::future<ull> OddFuture = OddSum.get_future();
+
+
+
     auto StartTime = high_resolution_clock::now();
 
-    std::thread t1(FindOdd, start, end);
-    std::thread t2(FindEven, start, end);
+    std::thread t1(FindOdd, std::move(OddSum), start, end);
+
+    cout << "OddSum: " << OddFuture.get() << endl;
 
     t1.join();
-    t2.join();
  
     auto StopTime = high_resolution_clock::now();
 
@@ -55,11 +63,9 @@ int main()
 
     auto duration = duration_cast<microseconds>(StopTime - StartTime);
 
-    cout << "OddSum: " << odd_sum << endl;
-    cout << "EvenSum: " << even_sum << endl;
+    cout << "Completed in : " << duration.count()/1000000 << endl;
 
-    cout << duration.count() / 1000000 << endl;
-
+    getchar();
     return 0;
 }
 
