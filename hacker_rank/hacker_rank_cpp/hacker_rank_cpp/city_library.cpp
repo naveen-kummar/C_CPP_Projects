@@ -17,99 +17,100 @@ vector<string> split_string(string);
 // Complete the roadsAndLibraries function below.
 long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities) {
 
-    map<int, std::set<int>> circles;
 
-    int number_of_roads = cities.size();
+    long lib_in_all_cities = n * c_lib;
+
+    if (cities.size() == 0)
+        return lib_in_all_cities;
+
+    for (auto& path : cities)
+    {
+        std::sort(std::begin(path), std::end(path));
+    }
+
+    std::sort(std::begin(cities), std::end(cities));
+
+    //int unique_cities = 0;
+    int unique_paths = cities.size();
+    int processed_paths = 0;
+
+    int prev_road = -1;
+    map<int, set<int>> circles;
+    int n_paths = 0;
+    long lib_in_select_cities = 0;
+    set<int> unique_cities{};
+    set<int> unique_src_cities{};
+    int perfect_circle = 0;
+
 
     for (auto road : cities)
     {
-        circles[road[0]].emplace(road[0]);
-        circles[road[0]].emplace(road[1]);
-        int current_src = road[0];
-        int current_dst = road[1];
-
-
-        auto dst_iter = std::find_if(std::begin(cities), std::end(cities), [&current_dst](auto v)
-            {return (current_dst == v[0]); });
-#if 1
-        //Find is above src is part of circle
-        while ((current_src != current_dst) &&
-            (dst_iter != std::end(cities)))
+        if (circles.empty())
         {
-            current_src = (*dst_iter)[0];
-            current_dst = (*dst_iter)[1];
-
-            if (std::find(std::begin(circles[road[0]]), std::end(circles[road[0]]), current_dst) != std::end(circles[road[0]]))
-            {
-                break;
-            }
-            else
-            {
-                circles[road[0]].insert(current_dst);
-            }
-
+            circles[road[0]].insert({ road[1] });
+            unique_src_cities.insert({ road[0] });
+            ++n_paths;
         }
-#endif
-        //std::sort(std::begin(dst_list), std::end(dst_list));
-
-        //if (std::find_if(std::begin(circles), std::end(circles), [&dst_list](vector<int> v)
-        //    {return v == dst_list; }) == std::end(circles))
-        //{
-        //    circles.push_back(dst_list);
-        //}
-
-        //dst_list.clear();
-
-    }
-
-    int lib_in_all_cities = n * c_lib;
-
-
-    int n_lib = 0;
-    int n_paths = 0;
-    set<int> unique_src_cities;
-    set<int> unique_cities;
-    int lib_in_select_cities = 0;
-#if 1
-    for (auto path : circles)
-    {
-        if (std::find(std::begin(unique_src_cities), std::end(unique_src_cities), path.first) == std::end(unique_src_cities))
+        else
         {
-            unique_src_cities.insert(path.first);
-            ++n_lib;
+            bool city_added_earlier = false;
+            for (auto& circle : circles)
+            {
 
+                if (((std::find(std::begin(circle.second), std::end(circle.second), road[0]) != std::end(circle.second))) &&
+                    ((std::find(std::begin(circle.second), std::end(circle.second), road[1]) != std::end(circle.second))))
+                {
+                    city_added_earlier = true;
+                    ++perfect_circle;
+                    ++n_paths;
+                    break;
+                }
+                else  if (std::find(std::begin(circle.second), std::end(circle.second), road[0]) != std::end(circle.second))
+                {
+                    circle.second.insert(road[1]);
+                    city_added_earlier = true;
+                    ++n_paths;
+
+                    break;
+                }
+
+            }
+
+
+
+            if (city_added_earlier == false)
+            {
+                circles[road[0]].insert({ road[1] });
+                unique_src_cities.insert({ road[0] });
+                ++n_paths;
+            }
         }
 
         if (unique_cities.size() < n)
         {
-            for (auto city : path.second)
-            {
-                if (std::find(std::begin(unique_cities), std::end(unique_cities), city) == std::end(unique_cities))
-                {
-                    unique_cities.insert(city);
-                }
+            unique_cities.insert(road[0]);
+            unique_cities.insert(road[1]);
 
-                if (unique_cities.size() == n)
-                {
-                    break;
-                }
-            }
         }
 
-        n_paths += path.second.size() - 1;
+        //perfect_circle = std::count_if(std::begin(circles), std::end(circles), [](auto v)
+        //    {return (std::find(std::begin(v.second), std::end(v.second), v.first) != std::end(v.second)); });
 
-        lib_in_select_cities = (n_lib * c_lib) + (n_paths * c_road) + ((n - unique_cities.size()) * c_lib);
+
+        lib_in_select_cities = (unique_src_cities.size() * c_lib) + ((n_paths - perfect_circle) * c_road) + ((n - unique_cities.size()) * c_lib);
 
         if (lib_in_select_cities > lib_in_all_cities)
         {
             break;
         }
     }
-#endif
 
-    std::cout << "Number of libs:  " << n_lib << std::endl;
+    std::cout << "Number perfect_circle:  " << perfect_circle << std::endl;
+
+    std::cout << "Number of libs:  " << unique_src_cities.size() << std::endl;
     std::cout << "Number of n_paths:  " << n_paths << std::endl;
-    std::cout << "Number of left out city:  " << ((n - unique_cities.size()) << std::endl;
+    std::cout << "Number of left out city:  " << (n - unique_cities.size()) << std::endl;
+
 
     return (lib_in_select_cities < lib_in_all_cities) ? lib_in_select_cities : lib_in_all_cities;
 
