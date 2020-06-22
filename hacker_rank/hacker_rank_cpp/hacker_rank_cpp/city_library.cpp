@@ -10,110 +10,64 @@
 
 using namespace std;
 
-
-
 vector<string> split_string(string);
+bool Visited[100000];
+vector<int> city_connections[100000];
+int nodes = 0;
+
+void FindNodeCount_DFS(int n)
+{
+    nodes++;
+    Visited[n] = true;
+
+    for (int c : city_connections[n])
+    {
+        if (Visited[c] == false)
+        {
+            FindNodeCount_DFS(c);
+        }
+    }
+}
 
 // Complete the roadsAndLibraries function below.
 long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities) {
 
-
-    long lib_in_all_cities = n * c_lib;
-
-    if (cities.size() == 0)
-        return lib_in_all_cities;
-
-    for (auto& path : cities)
-    {
-        std::sort(std::begin(path), std::end(path));
-    }
-
-    std::sort(std::begin(cities), std::end(cities));
-
-    //int unique_cities = 0;
-    int unique_paths = cities.size();
-    int processed_paths = 0;
-
-    int prev_road = -1;
-    map<int, set<int>> circles;
-    int n_paths = 0;
-    long lib_in_select_cities = 0;
-    set<int> unique_cities{};
-    set<int> unique_src_cities{};
-    int perfect_circle = 0;
-
+    long cost = 0;
 
     for (auto road : cities)
     {
-        if (circles.empty())
+        city_connections[road[0]].push_back(road[1]);
+        city_connections[road[1]].push_back(road[0]);
+    }
+
+    for (int city = 1; city <= n; city++)
+    {
+        if (Visited[city] == false)
         {
-            circles[road[0]].insert({ road[1] });
-            unique_src_cities.insert({ road[0] });
-            ++n_paths;
-        }
-        else
-        {
-            bool city_added_earlier = false;
-            for (auto& circle : circles)
+            nodes = 0;
+            FindNodeCount_DFS(city);
+
+            cost = cost + c_lib;
+
+            if (c_lib > c_road)
             {
-
-                if (((std::find(std::begin(circle.second), std::end(circle.second), road[0]) != std::end(circle.second))) &&
-                    ((std::find(std::begin(circle.second), std::end(circle.second), road[1]) != std::end(circle.second))))
-                {
-                    city_added_earlier = true;
-                    ++perfect_circle;
-                    ++n_paths;
-                    break;
-                }
-                else  if (std::find(std::begin(circle.second), std::end(circle.second), road[0]) != std::end(circle.second))
-                {
-                    circle.second.insert(road[1]);
-                    city_added_earlier = true;
-                    ++n_paths;
-
-                    break;
-                }
-
+                cost = cost + ((nodes - 1) * c_road);
             }
-
-
-
-            if (city_added_earlier == false)
+            else
             {
-                circles[road[0]].insert({ road[1] });
-                unique_src_cities.insert({ road[0] });
-                ++n_paths;
+                cost = cost + ((nodes - 1) * c_lib);
             }
-        }
-
-        if (unique_cities.size() < n)
-        {
-            unique_cities.insert(road[0]);
-            unique_cities.insert(road[1]);
-
-        }
-
-        //perfect_circle = std::count_if(std::begin(circles), std::end(circles), [](auto v)
-        //    {return (std::find(std::begin(v.second), std::end(v.second), v.first) != std::end(v.second)); });
-
-
-        lib_in_select_cities = (unique_src_cities.size() * c_lib) + ((n_paths - perfect_circle) * c_road) + ((n - unique_cities.size()) * c_lib);
-
-        if (lib_in_select_cities > lib_in_all_cities)
-        {
-            break;
         }
     }
 
-    std::cout << "Number perfect_circle:  " << perfect_circle << std::endl;
+    for (int i = 0; i < 100000; i++)
+    {
+        city_connections[i].clear();
+        Visited[i] = false;
+    }
 
-    std::cout << "Number of libs:  " << unique_src_cities.size() << std::endl;
-    std::cout << "Number of n_paths:  " << n_paths << std::endl;
-    std::cout << "Number of left out city:  " << (n - unique_cities.size()) << std::endl;
 
-
-    return (lib_in_select_cities < lib_in_all_cities) ? lib_in_select_cities : lib_in_all_cities;
-
+    return cost;
 }
 
 int main()
