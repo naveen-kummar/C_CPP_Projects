@@ -70,7 +70,7 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
     return cost;
 }
 
-int main()
+int main2()
 {
    // ofstream fout(getenv("OUTPUT_PATH"));
 
