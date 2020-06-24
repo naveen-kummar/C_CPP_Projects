@@ -94,7 +94,7 @@ public:
     };
 };
 
-int main() {
+int main5() {
     int queries;
     cin >> queries;
 

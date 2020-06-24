@@ -1,3 +1,4 @@
+#if 0
 using namespace std;
 
 #define IN(a,x,y) (a>=x && a<=y)
@@ -57,3 +58,4 @@ int main(void)
     printf("%d\n", val(x, y));
     return 0;
 }
+#endif
