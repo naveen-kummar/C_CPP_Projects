@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BFS_Graph.cpp" />
     <ClCompile Include="chess_board_knight.cpp" />
     <ClCompile Include="chess_board_knight_dynamic_approach.cpp" />
     <ClCompile Include="city_library.cpp" />

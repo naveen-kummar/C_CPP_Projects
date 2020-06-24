@@ -1,113 +1,59 @@
-#pragma once
-#include <fstream>
-#include <iostream>
-#include <vector>
-#include <string>
-
-#include <algorithm>
-
 using namespace std;
 
-vector<string> split_string1(string);
+#define IN(a,x,y) (a>=x && a<=y)
 
-// Complete the queensAttack function below.
-int queensAttack(int n, int k, int r_q, int c_q, vector<vector<int>> obstacles) {
+const int MAXOBS = 100000;
 
-    int attacks = 0;
-    int d_x[8] = { 1, 1, 0, -1, -1, -1, 0, 1 };
-    int d_y[8] = { 0, 1, 1, 1, 0, -1, -1, -1 };
+int N, K;
+int ox[MAXOBS + 10], oy[MAXOBS + 10];
 
-    for (int dir = 0; dir < 8; dir++)
-    {
-        int curr_r = r_q;
-        int curr_c = c_q;
-
-        while (true)
-        {
-            curr_r += d_x[dir];
-            curr_c += d_y[dir];
-            if ((curr_r > 0) && (curr_r <= n) && (curr_c > 0) && (curr_c <= n) &&
-                ((std::find_if(std::begin(obstacles), std::end(obstacles), [curr_r, curr_c](auto v) {return ((v[0] == curr_r) && (v[1] == curr_c)); }) == std::end(obstacles))))
-            {
-                ++attacks;
-            }
-            else
-            {
-                break;
-            }
-        }
-    }
-
-    return attacks;
-}
-
-int main()
+int val(int x, int y)
 {
-    //ofstream fout(_dupenv_s("OUTPUT_PATH"));
+    int i;
 
-    string nk_temp;
-    getline(cin, nk_temp);
+    int d11, d12, d21, d22, r1, r2, c1, c2;
 
-    vector<string> nk = split_string1(nk_temp);
+    d11 = min(x - 1, y - 1);// 3
+    d12 = min(N - x, N - y); //4
+    d21 = min(N - x, y - 1);//3
+    d22 = min(x - 1, N - y);//3
 
-    int n = stoi(nk[0]);
+    r1 = y - 1; //3
+    r2 = N - y; //4
+    c1 = x - 1; //3
+    c2 = N - x; //4
+    for (i = 0; i < K; i++)
+    {
+        if (x > ox[i] && y > oy[i] && x - ox[i] == y - oy[i]) d11 = min(d11, x - ox[i] - 1);
+        if (ox[i] > x && oy[i] > y && ox[i] - x == oy[i] - y) d12 = min(d12, ox[i] - x - 1);
+        if (ox[i] > x && y > oy[i] && ox[i] - x == y - oy[i]) d21 = min(d21, ox[i] - x - 1);
+        if (x > ox[i] && oy[i] > y && x - ox[i] == oy[i] - y) d22 = min(d22, x - ox[i] - 1);
 
-    int k = stoi(nk[1]);
-
-    string r_qC_q_temp;
-    getline(cin, r_qC_q_temp);
-
-    vector<string> r_qC_q = split_string1(r_qC_q_temp);
-
-    int r_q = stoi(r_qC_q[0]);
-
-    int c_q = stoi(r_qC_q[1]);
-
-    vector<vector<int>> obstacles(k);
-    for (int i = 0; i < k; i++) {
-        obstacles[i].resize(2);
-
-        for (int j = 0; j < 2; j++) {
-            cin >> obstacles[i][j];
-        }
-
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        if (x == ox[i] && oy[i] < y) r1 = min(r1, y - oy[i] - 1);
+        if (x == ox[i] && oy[i] > y) r2 = min(r2, oy[i] - y - 1);
+        if (y == oy[i] && ox[i] < x) c1 = min(c1, x - ox[i] - 1);
+        if (y == oy[i] && ox[i] > x) c2 = min(c2, ox[i] - x - 1);
     }
 
-    int result = queensAttack(n, k, r_q, c_q, obstacles);
-
-    cout << result << "\n";
-
-    //fout.close();
-
-    return 0;
+    return d11 + d12 + d21 + d22 + r1 + r2 + c1 + c2;
 }
+int main(void)
+{
+    int i, j, k, kase = 0;
 
-vector<string> split_string1(string input_string) {
-    string::iterator new_end = unique(input_string.begin(), input_string.end(), [](const char& x, const char& y) {
-        return x == y and x == ' ';
-        });
+    int x, y;
+    scanf("%d %d", &N, &K);
+    scanf("%d %d", &x, &y);
 
-    input_string.erase(new_end, input_string.end());
+    assert(IN(N, 1, 100000));
+    assert(IN(K, 0, 100000));
 
-    while (input_string[input_string.length() - 1] == ' ') {
-        input_string.pop_back();
+    for (i = 0; i < K; i++)
+    {
+        scanf("%d %d", &ox[i], &oy[i]);
+        assert(IN(ox[i], 1, N) && IN(oy[i], 1, N) && (ox[i] != x || oy[i] != y));
     }
 
-    vector<string> splits;
-    char delimiter = ' ';
-
-    size_t i = 0;
-    size_t pos = input_string.find(delimiter);
-
-    while (pos != string::npos) {
-        splits.push_back(input_string.substr(i, pos - i));
-
-        i = pos + 1;
-        pos = input_string.find(delimiter, i);
-    }
-
-    splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
-
-    return splits;
+    printf("%d\n", val(x, y));
+    return 0;
 }
