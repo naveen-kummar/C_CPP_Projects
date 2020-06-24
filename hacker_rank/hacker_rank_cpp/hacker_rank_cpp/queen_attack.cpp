@@ -12,21 +12,10 @@ vector<string> split_string1(string);
 
 // Complete the queensAttack function below.
 int queensAttack(int n, int k, int r_q, int c_q, vector<vector<int>> obstacles) {
-    /*
-        cout << "k value = " << k << endl;
-        cout << "Obstacles size = " << obstacles.size() << endl;
 
-        for(auto ov : obstacles)
-        {
-            cout << "ov size = " << ov.size() << endl;
-            for(auto iv : ov)
-            {
-                cout << "Obstacles value = " << iv << endl;
-            }
-        }
-
-    */
     int attacks = 0;
+    int d_x[8] = { 1, 1, 0, -1, -1, -1, 0, 1 };
+    int d_y[8] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 
     for (int dir = 0; dir < 8; dir++)
     {
@@ -35,43 +24,8 @@ int queensAttack(int n, int k, int r_q, int c_q, vector<vector<int>> obstacles) 
 
         while (true)
         {
-            if (dir == 0)
-            {
-                ++curr_r;
-            }
-            else if (dir == 1)
-            {
-                ++curr_r;
-                ++curr_c;
-            }
-            else if (dir == 2)
-            {
-                ++curr_c;
-            }
-            else if (dir == 3)
-            {
-                --curr_r;
-                ++curr_c;
-            }
-            else if (dir == 4)
-            {
-                --curr_r;
-            }
-            else if (dir == 5)
-            {
-                --curr_r;
-                --curr_c;
-            }
-            else if (dir == 6)
-            {
-                --curr_c;
-            }
-            else if (dir == 7)
-            {
-                ++curr_r;
-                --curr_c;
-            }
-
+            curr_r += d_x[dir];
+            curr_c += d_y[dir];
             if ((curr_r > 0) && (curr_r <= n) && (curr_c > 0) && (curr_c <= n) &&
                 ((std::find_if(std::begin(obstacles), std::end(obstacles), [curr_r, curr_c](auto v) {return ((v[0] == curr_r) && (v[1] == curr_c)); }) == std::end(obstacles))))
             {
