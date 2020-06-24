@@ -151,6 +151,7 @@
     <ClCompile Include="chess_board_knight_dynamic_approach.cpp" />
     <ClCompile Include="city_library.cpp" />
     <ClCompile Include="hacker_rank_cpp.cpp" />
+    <ClCompile Include="queen_attack.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
