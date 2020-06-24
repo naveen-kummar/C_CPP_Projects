@@ -3,7 +3,7 @@
 #include <algorithm>
 using namespace std;
 
-int dp[8][8] = { 0 };
+int dp[21][21] = { 0 };
 
 struct Point
 {
@@ -26,15 +26,18 @@ struct Point
 
 int GetTotalSteps(int x, int y, int tx, int ty)
 {
+	//std::cout << "GetTotalSteps vals x: " << x << ", y:" << y << ", tx:" << tx << ", ty:" << ty << endl;
 	if (x == tx &&
 		y == ty)
 	{
+		//std::cout << "Reacheed destination " << std::endl;
 		return dp[0][0];
 	}
 	else
 	{
 		if (dp[abs(x - tx)][abs(y - ty)] != 0)
 		{
+			//std::cout << "Returning val : " << dp[abs(x - tx)][abs(y - ty)] << std::endl;
 			return dp[abs(x - tx)][abs(y - ty)];
 		}
 		else
@@ -71,8 +74,10 @@ int GetTotalSteps(int x, int y, int tx, int ty)
 				}
 			}
 
-			dp[abs(x - tx)][abs(y - ty)] == min(GetTotalSteps(x1, y1, tx, ty),
+			dp[abs(x - tx)][abs(y - ty)] = min(GetTotalSteps(x1, y1, tx, ty),
 				GetTotalSteps(x2, y2, tx, ty)) + 1;
+
+			//std::cout << "Setting value at " << abs(x - tx) << ", " << abs(y - ty) << " as " << dp[abs(x - tx)][abs(y - ty)] << std::endl;
 
 			dp[abs(y - ty)][abs(x - tx)] = dp[abs(x - tx)][abs(y - ty)];
 
@@ -83,12 +88,12 @@ int GetTotalSteps(int x, int y, int tx, int ty)
 
 
 
-int main() {
+int main4() {
 	//code
 
 	int test_case;
 
-	std::cout << "Input test cases : " << std::endl;
+	//std::cout << "Input test cases : " << std::endl;
 
 	std::cin >> test_case;
 
@@ -107,10 +112,15 @@ int main() {
 
 	for (int test = 0; test < test_case; test++)
 	{
+
+		for (int m = 0; m < 21; m++)
+			for (int n = 0; n < 21; n++)
+				dp[m][n] = 0;
+
 		int Steps = 0;
 		//When source and destination position are diagonally adjacent at the corner of chess board
 		//then we have edge case where number of stesp always be 4.
-		if((abs(curr_pos[test].X - dst_pos[test].X) == 1) &&
+		if ((abs(curr_pos[test].X - dst_pos[test].X) == 1) &&
 			(abs(curr_pos[test].Y - dst_pos[test].Y) == 1) &&
 			(((max(curr_pos[test].X, dst_pos[test].X) == v_sizes[test]) ||
 				(min(curr_pos[test].X, dst_pos[test].X) == 1)) &&
@@ -121,9 +131,10 @@ int main() {
 		}
 		else
 		{
+			//std::cout << "Into else part: " << std::endl;
 			//Lets create matrix whose index represent abs difference between X and Y
 			//And value indicates number of steps to reach them in 5x5 board
-			
+
 			dp[1][0] = 3;
 			dp[0][1] = 3;
 			dp[1][1] = 2;
