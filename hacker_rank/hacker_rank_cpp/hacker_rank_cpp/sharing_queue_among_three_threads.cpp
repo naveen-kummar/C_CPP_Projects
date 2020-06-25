@@ -9,7 +9,7 @@
 std::mutex GLOBAL_MUTEX;
 std::condition_variable GLOBAL_CONDITION_VARIABLE;
 constexpr unsigned int max_buffer_size = 100;
-std::queue<int> GLOBAL_QUEUE;
+std::shared_ptr<std::queue<int>> GLOBAL_QUEUE;
 
 // Declaring global variables 
 int sum_B = 0, sum_C = 0;
@@ -31,13 +31,13 @@ public:
 		while (true)
 		{
 			std::unique_lock<std::mutex> locker(GLOBAL_MUTEX);
-			GLOBAL_CONDITION_VARIABLE.wait(locker, []() {return (GLOBAL_QUEUE.size() < max_buffer_size); });
+			GLOBAL_CONDITION_VARIABLE.wait(locker, [this]() {return (producer_queue->size() < max_buffer_size); });
 
 			// Getting the random number 
 			int num = rand() % 10 + 1;
 			std::cout << "Produced:  " << num << std::endl;
 
-			GLOBAL_QUEUE.push(num);
+			producer_queue->push(num);
 
 			++producer_count;
 			locker.unlock();
@@ -64,12 +64,12 @@ public:
 		while (true)
 		{
 			std::unique_lock<std::mutex> locker(GLOBAL_MUTEX);
-			GLOBAL_CONDITION_VARIABLE.wait(locker, []() {return (GLOBAL_QUEUE.size() > 0); });
-			int val = GLOBAL_QUEUE.front();
+			GLOBAL_CONDITION_VARIABLE.wait(locker, [this]() {return (even_consumer->size() > 0); });
+			int val = even_consumer->front();
 			std::cout << "B thread processing: " << val << std::endl;
 			if ((val & 1) == 0)
 			{
-				GLOBAL_QUEUE.pop();
+				even_consumer->pop();
 				sum_B += val;
 				std::cout << "B thread consumed: " << val << std::endl;
 				++consumerCount1;
@@ -101,12 +101,12 @@ public:
 		while (true)
 		{
 			std::unique_lock<std::mutex> locker(GLOBAL_MUTEX);
-			GLOBAL_CONDITION_VARIABLE.wait(locker, []() {return (GLOBAL_QUEUE.size() > 0); });
-			int val = GLOBAL_QUEUE.front();
+			GLOBAL_CONDITION_VARIABLE.wait(locker, [this]() {return (odd_consumer->size() > 0); });
+			int val = odd_consumer->front();
 			std::cout << "C thread processing: " << val << std::endl;
 			if ((val & 1) == 1)
 			{
-				GLOBAL_QUEUE.pop();
+				odd_consumer->pop();
 				sum_C += val;
 				std::cout << "C thread consumed: " << val << std::endl;
 				++consumerCount2;
@@ -122,3 +122,14 @@ private:
 
 	std::shared_ptr<std::queue<int>> odd_consumer;
 };
+
+int main()
+{
+	GLOBAL_QUEUE = std::make_shared<std::queue<int>>();
+
+	std::unique_ptr<RandomNumberGenerator> random_gen = std::make_unique<RandomNumberGenerator>(GLOBAL_QUEUE);
+	std::unique_ptr<ProcesEvenNumbers> even_proc = std::make_unique<ProcesEvenNumbers>(GLOBAL_QUEUE);
+	std::unique_ptr<ProcesOddNumbers> odd_proc = std::make_unique<ProcesOddNumbers>(GLOBAL_QUEUE);
+
+
+}

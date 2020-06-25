@@ -77,7 +77,7 @@ int maxRegion(vector<vector<int>> grid) {
     return max_region;
 }
 
-int main()
+int main6()
 {
     //ofstream fout(getenv("OUTPUT_PATH"));
 
