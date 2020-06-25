@@ -36,9 +36,7 @@ public:
 			GLOBAL_CONDITION_VARIABLE.wait(locker, [this]() {return ((producer_queue->size() < max_buffer_size) && (producer_count < max_buffer_size)); });
 
 			// Getting the random number 
-			int num = producer_count;// rand();
-			std::cout << "Produced:  " << num << std::endl;
-
+			int num = producer_count;
 			producer_queue->push(num);
 
 			++producer_count;
@@ -47,16 +45,9 @@ public:
 
 			if (producer_count >= max_buffer_size)
 			{
-				std::cout << "Producer Loop about to exit as producer_count is  " << producer_count << std::endl;
 				break;
 			}
-
-			//std::cout << "While loop Producer - Shared ptr count = " << producer_queue.use_count() << std::endl;
-		}
-
-		std::cout << "Producer Loop exited: " << std::endl;
-		std::cout << "Final Producer queue size =  " << producer_queue->size() << std::endl;
-		
+		}		
 	}
 
 private:
@@ -81,39 +72,24 @@ public:
 
 			if (even_consumer->size() > 0)
 			{
-				//std::this_thread::sleep_for(std::chrono::milliseconds(150));
 				int val = even_consumer->front();
-				//std::cout << "B thread processing: " << val << std::endl;
 				if ((val & 1) == 0)
 				{
 					even_consumer->pop();
 					even_sum += val;
-					std::cout << "B thread consumed: " << val << std::endl;
 					++consumerCount1;
 				}
-			}
-			else
-			{
-				std::cout << "############Danger Even queue zero############## " << std::endl;
 			}
 
 			locker.unlock();
 			GLOBAL_CONDITION_VARIABLE.notify_one();
 
-			if ((consumerCount1 + consumerCount2 == max_buffer_size))//if (producer_in_prog == false)
+			if ((consumerCount1 + consumerCount2 == max_buffer_size))
 			{
-				std::cout << "Even Consumer Loop about to exit: " << std::endl;
 				EvenSum.set_value(even_sum);
 				break;
 			}
-
-			//std::cout << "While loop EvenConsumer - Shared ptr count = " << even_consumer.use_count() << std::endl;
-			//std::cout << "EvenConsumer queue size = " << even_consumer->size() <<  std::endl;
-
 		}
-
-		std::cout << "Even Consumer Loop exited: "  << std::endl;
-		std::cout << "Final Even Consumer queue size =  " << even_consumer->size() << std::endl;
 	}
 
 private:
@@ -140,39 +116,24 @@ public:
 
 			if (odd_consumer->size() > 0)
 			{
-				//std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				int val = odd_consumer->front();
-				//std::cout << "C thread processing: " << val << std::endl;
 				if ((val & 1) == 1)
 				{
 					odd_consumer->pop();
 					odd_sum += val;
-					std::cout << "C thread consumed: " << val << std::endl;
 					++consumerCount2;
 				}
 			}
-			else
-			{
-				std::cout << "############Danger Odd queue zero############## " << std::endl;
-			}
-
 
 			locker.unlock();
 			GLOBAL_CONDITION_VARIABLE.notify_one();
 
-			if ((consumerCount1 + consumerCount2 == max_buffer_size))//if (producer_in_prog == false)
+			if ((consumerCount1 + consumerCount2 == max_buffer_size))
 			{
-				std::cout << "Odd Consumer Loop about to exit: " << std::endl;
 				OddSum.set_value(odd_sum);
 				break;
 			}
-				
-			//std::cout << "While loop OddConsumer - Shared ptr count = " << odd_consumer.use_count() << std::endl;
-			//std::cout << "OddConsumer queue size = " << odd_consumer->size() << std::endl;
 		}
-
-		std::cout << "Odd Consumer Loop exited: " << std::endl;
-		std::cout << "Final Odd Consumer queue size =  " << odd_consumer->size() << std::endl;
 	}
 
 private:
@@ -190,8 +151,6 @@ int main()
 
 	std::promise<ull> OddSum;
 	std::future<ull> OddFuture = OddSum.get_future();
-
-
 
 	std::unique_ptr<RandomNumberGenerator> random_gen = std::make_unique<RandomNumberGenerator>(GLOBAL_QUEUE);
 	std::unique_ptr<ProcesEvenNumbers> even_proc = std::make_unique<ProcesEvenNumbers>(GLOBAL_QUEUE);
@@ -213,7 +172,7 @@ int main()
 
 	// Checking for the final value of thread 
 	std::cout << ">>>> consumerCount1: " << consumerCount1 << " and consumerCount2:" << consumerCount2 << " <<<<" << std::endl;
-	std::cout << "Final queue size is = " << GLOBAL_QUEUE->size() << std::endl;
+
 	if (sum_C > sum_B)
 		std::cout << "Winner is  Thread C" << std::endl;
 	else if (sum_C < sum_B)
