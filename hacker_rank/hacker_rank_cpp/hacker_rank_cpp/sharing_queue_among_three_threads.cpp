@@ -6,6 +6,7 @@
 #include <memory>
 #include <mutex>
 #include <chrono>
+#include <future>
 
 std::mutex GLOBAL_MUTEX;
 std::condition_variable GLOBAL_CONDITION_VARIABLE;
@@ -13,7 +14,6 @@ constexpr unsigned int max_buffer_size = 10000;
 std::shared_ptr<std::queue<int>> GLOBAL_QUEUE;
 
 // Declaring global variables 
-int sum_B = 0, sum_C = 0;
 int consumerCount1 = 0;
 int consumerCount2 = 0;
 
@@ -69,10 +69,10 @@ class ProcesEvenNumbers
 public:
 	ProcesEvenNumbers(std::shared_ptr<std::queue<int>> q) : even_consumer{ q }
 	{
-
+		even_sum = 0;
 	}
 
-	void PopEvenNumbers()
+	void PopEvenNumbers(std::promise<ull>&& EvenSum)
 	{
 		while (true)
 		{
@@ -87,7 +87,7 @@ public:
 				if ((val & 1) == 0)
 				{
 					even_consumer->pop();
-					sum_B += val;
+					even_sum += val;
 					std::cout << "B thread consumed: " << val << std::endl;
 					++consumerCount1;
 				}
@@ -103,6 +103,7 @@ public:
 			if ((consumerCount1 + consumerCount2 == max_buffer_size))//if (producer_in_prog == false)
 			{
 				std::cout << "Even Consumer Loop about to exit: " << std::endl;
+				EvenSum.set_value(even_sum);
 				break;
 			}
 
@@ -118,6 +119,7 @@ public:
 private:
 
 	std::shared_ptr<std::queue<int>> even_consumer;
+	ull even_sum;
 };
 
 
@@ -126,10 +128,10 @@ class ProcesOddNumbers
 public:
 	ProcesOddNumbers(std::shared_ptr<std::queue<int>> q) : odd_consumer{ q }
 	{
-
+		odd_sum = 0;
 	}
 
-	void PopOddNumbers()
+	void PopOddNumbers(std::promise<ull>&& OddSum)
 	{
 		while (true)
 		{
@@ -144,7 +146,7 @@ public:
 				if ((val & 1) == 1)
 				{
 					odd_consumer->pop();
-					sum_C += val;
+					odd_sum += val;
 					std::cout << "C thread consumed: " << val << std::endl;
 					++consumerCount2;
 				}
@@ -161,6 +163,7 @@ public:
 			if ((consumerCount1 + consumerCount2 == max_buffer_size))//if (producer_in_prog == false)
 			{
 				std::cout << "Odd Consumer Loop about to exit: " << std::endl;
+				OddSum.set_value(odd_sum);
 				break;
 			}
 				
@@ -175,23 +178,38 @@ public:
 private:
 
 	std::shared_ptr<std::queue<int>> odd_consumer;
+	ull odd_sum;
 };
 
 int main()
 {
 	GLOBAL_QUEUE = std::make_shared<std::queue<int>>();
 
+	std::promise<ull> EvenSum;
+	std::future<ull> EvenFuture = EvenSum.get_future();
+
+	std::promise<ull> OddSum;
+	std::future<ull> OddFuture = OddSum.get_future();
+
+
+
 	std::unique_ptr<RandomNumberGenerator> random_gen = std::make_unique<RandomNumberGenerator>(GLOBAL_QUEUE);
 	std::unique_ptr<ProcesEvenNumbers> even_proc = std::make_unique<ProcesEvenNumbers>(GLOBAL_QUEUE);
 	std::unique_ptr<ProcesOddNumbers> odd_proc = std::make_unique<ProcesOddNumbers>(GLOBAL_QUEUE);
 
 	std::thread t_producer(&RandomNumberGenerator::AddRandomNumbers, random_gen.get());
-	std::thread t_even_proc(&ProcesEvenNumbers::PopEvenNumbers, even_proc.get());
-	std::thread t_odd_proc(&ProcesOddNumbers::PopOddNumbers, odd_proc.get());
+	std::thread t_even_proc(&ProcesEvenNumbers::PopEvenNumbers, even_proc.get(), std::move(EvenSum));
+	std::thread t_odd_proc(&ProcesOddNumbers::PopOddNumbers, odd_proc.get(), std::move(OddSum));
 
 	t_producer.join();
-	t_even_proc.join();
-	t_odd_proc.join();
+	//t_even_proc.join();
+	//t_odd_proc.join();
+
+	ull sum_B = EvenFuture.get();
+	ull sum_C = OddFuture.get();
+
+	std::cout << "Even Sum value = " << sum_B << std::endl;
+	std::cout << "Odd Sum value = " << sum_C << std::endl;
 
 	// Checking for the final value of thread 
 	std::cout << ">>>> consumerCount1: " << consumerCount1 << " and consumerCount2:" << consumerCount2 << " <<<<" << std::endl;
