@@ -1,4 +1,3 @@
-//https://www.geeksforgeeks.org/sharing-queue-among-three-threads/
 
 #include <iostream> 
 #include <queue> 
