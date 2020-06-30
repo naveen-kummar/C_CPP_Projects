@@ -140,6 +140,7 @@ int main2()
        
         for (auto e : vec)
         {
+            
             e.reset();
         }
 

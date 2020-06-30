@@ -114,7 +114,7 @@ public:
 	}
 };
 
-int main()
+int main5()
 {
 	int os{};
 	cin >> os;
