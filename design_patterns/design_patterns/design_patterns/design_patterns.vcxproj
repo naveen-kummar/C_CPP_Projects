@@ -147,7 +147,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="design_patterns.cpp" />
+    <ClCompile Include="1_design_patterns.cpp" />
+    <ClCompile Include="2_test_code.cpp" />
+    <ClCompile Include="3_startegy_pattern.cpp" />
+    <ClCompile Include="4_factory_method_pattern.cpp" />
+    <ClCompile Include="5_abstract_factory_pattern.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="design_patterns.h" />

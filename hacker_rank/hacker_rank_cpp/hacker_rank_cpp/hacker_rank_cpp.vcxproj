@@ -155,6 +155,7 @@
     <ClCompile Include="hacker_rank_cpp.cpp" />
     <ClCompile Include="queen_attack.cpp" />
     <ClCompile Include="sharing_queue_among_three_threads.cpp" />
+    <ClCompile Include="test_code.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -141,7 +141,7 @@ private:
 	ull odd_sum;
 };
 
-int main()
+int main7()
 {
 	GLOBAL_QUEUE = std::make_shared<std::queue<int>>();
 
