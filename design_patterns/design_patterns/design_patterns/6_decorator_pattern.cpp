@@ -96,7 +96,7 @@ public:
 	}
 };
 
-int main()
+int main6()
 {
 	//Base + Palace
 	unique_ptr<ITicket> my_ticket = std::make_unique<BaseEntryTicket>();

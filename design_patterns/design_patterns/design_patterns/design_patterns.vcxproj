@@ -153,6 +153,7 @@
     <ClCompile Include="4_factory_method_pattern.cpp" />
     <ClCompile Include="5_abstract_factory_pattern.cpp" />
     <ClCompile Include="6_decorator_pattern.cpp" />
+    <ClCompile Include="7_state_pattern.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="design_patterns.h" />
