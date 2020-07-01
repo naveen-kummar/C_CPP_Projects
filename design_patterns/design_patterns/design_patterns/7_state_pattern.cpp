@@ -34,7 +34,7 @@ private:
 public:
 	AudioPlayer() 
 	{
-		state = make_shared<ReadyState>(*this);
+		//state = make_shared<ReadyState>(*this);
 	}
 	bool IsPlaying() { return playing; }
 
@@ -78,13 +78,13 @@ public:
 
 	void Lock() override
 	{
-		player->ChangeState(make_unique<LockedState>(player));
+		//player->ChangeState(make_unique<LockedState>(player));
 	}
 
 	void Play() override
 	{
 		player->StartPlayBack();
-		player->ChangeState(make_unique<ReadyState>(player));
+		//player->ChangeState(make_unique<ReadyState>(player));
 	}
 
 	void Next() override
@@ -115,7 +115,7 @@ public:
 		}
 		else
 		{
-			player->ChangeState(make_unique<ReadyState>(std::move(player)));
+			//player->ChangeState(make_unique<ReadyState>(std::move(player)));
 		}
 	}
 
@@ -165,7 +165,7 @@ public:
 	}
 };
 
-int main()
+int main7()
 {
 	return 0;
 }
