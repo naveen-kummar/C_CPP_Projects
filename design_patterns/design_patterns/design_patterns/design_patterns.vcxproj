@@ -155,6 +155,7 @@
     <ClCompile Include="6_decorator_pattern.cpp" />
     <ClCompile Include="7_state_pattern.cpp" />
     <ClCompile Include="8_observor_pattern.cpp" />
+    <ClCompile Include="9_command_pattern.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="design_patterns.h" />

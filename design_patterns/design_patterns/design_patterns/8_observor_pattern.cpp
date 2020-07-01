@@ -96,7 +96,7 @@ public:
 	}
 };
 
-int main()
+int main8()
 {
 
 	unique_ptr<Editor> editor = make_unique<Editor>();
