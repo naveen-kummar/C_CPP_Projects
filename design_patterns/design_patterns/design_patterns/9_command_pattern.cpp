@@ -182,35 +182,40 @@ public:
 		}
 	}
 
-	std::function<unique_ptr<AbstractCommand>()> fn_copy =
-		[this]() {return make_unique<CopyCommmand>(std::move(this), std::move(editor)); };
+	//std::function<unique_ptr<AbstractCommand>()> fn_copy =
+	//	[this]() {return make_unique<CopyCommmand>(std::move(this), std::move(editor)); };
 
-	std::function<unique_ptr<AbstractCommand>()> fn_cut =
-		[this]() {return make_unique<CutCommmand>(std::move(this), std::move(editor)); };
+	//std::function<unique_ptr<AbstractCommand>()> fn_cut =
+	//	[this]() {return make_unique<CutCommmand>(std::move(this), std::move(editor)); };
 
-	std::function<unique_ptr<AbstractCommand>()> fn_paste =
-		[this]() {return make_unique<PasteCommand>(std::move(this), std::move(editor)); };
+	//std::function<unique_ptr<AbstractCommand>()> fn_paste =
+	//	[this]() {return make_unique<PasteCommand>(std::move(this), std::move(editor)); };
 
-	std::function<unique_ptr<AbstractCommand>()> fn_undo =
-		[this]() {return make_unique<UndoCommand>(std::move(this), std::move(editor)); };
+	//std::function<unique_ptr<AbstractCommand>()> fn_undo =
+	//	[this]() {return make_unique<UndoCommand>(std::move(this), std::move(editor)); };
 
-	void DoCopy()
-	{
-		fn_copy();
-	}
+	//void DoCopy()
+	//{
+	//	fn_copy();
+	//}
 
-	void DoCut()
-	{
-		fn_cut();
-	}
+	//void DoCut()
+	//{
+	//	fn_cut();
+	//}
 
-	void DoPaste()
-	{
-		fn_paste();
-	}
+	//void DoPaste()
+	//{
+	//	fn_paste();
+	//}
 
-	void DoUndo()
-	{
-		fn_undo();
-	}
+	//void DoUndo()
+	//{
+	//	fn_undo();
+	//}
 };
+
+int main()
+{
+	return 0;
+}
