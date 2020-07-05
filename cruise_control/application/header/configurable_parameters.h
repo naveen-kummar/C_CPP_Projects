@@ -11,6 +11,11 @@ public:
 	ConfigParameters(const ConfigParameters&) = default;
 	ConfigParameters& operator=(const ConfigParameters&) = default;
 
+	inline float GetValue() const
+	{
+		return parameter_value;
+	}
+
 private: 
 	std::string parameter_name;
 	float parameter_value;

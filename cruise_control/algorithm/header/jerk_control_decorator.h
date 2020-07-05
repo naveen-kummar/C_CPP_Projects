@@ -6,8 +6,8 @@
 class JerkControlDecorator : public ConreteDecorator
 {
 public:
-	JerkControlDecorator(std::unique_ptr<ICruiseStartegy> decorated_algo) :
-		ConreteDecorator(std::move(decorated_algo))
+	JerkControlDecorator(std::unique_ptr<ICruiseStartegy> decorated_algo, const float jerk) :
+		ConreteDecorator(std::move(decorated_algo)), jerk_value_{jerk}
 	{
 
 	}
@@ -28,5 +28,7 @@ private:
 		//Algo for adjusting jerk...
 		return jerk_adjusted_accekleration;
 	}
+
+	float jerk_value_;
 };
 #endif

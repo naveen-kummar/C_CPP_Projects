@@ -15,10 +15,21 @@ public:
 		std::chrono::milliseconds freq) :
 		topic_data_{ topic }, node_{ node }, value_{}
 	{
-		publisher_ = node_->create_publisher<T>(topic_data_.GetTopicName(), 
-													topic_data_.GetQueueSize());
-		timer_ = node_->create_wall_timer(
-			freq, std::bind(&Publisher::timer_callback, this));
+		bPublishingStarted = false;
+	}
+
+	void StartPublishing()
+	{
+		if (bPublishingStarted == false)
+		{
+			bPublishingStarted = true;
+			publisher_ = node_->create_publisher<T>(topic_data_.GetTopicName(),
+				topic_data_.GetQueueSize());
+
+			timer_ = node_->create_wall_timer(
+				freq, std::bind(&Publisher::timer_callback, this));
+		}
+
 	}
 
 	inline void UpdateValue(T value)
@@ -37,9 +48,11 @@ private:
 
 	rclcpp::TimerBase::SharedPtr timer_;
 
+	bool bPublishingStarted;
+
 	void topic_callback()
 	{
-		RCLCPP_INFO(node_->get_logger(), "Publishing: '%s'", msg->data.c_str());
+		RCLCPP_INFO(node_->get_logger(), "Publishing: '%f'", value_);
 		publisher_->publish(value_);
 	}
 };

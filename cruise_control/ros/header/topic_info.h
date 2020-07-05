@@ -2,7 +2,6 @@
 #define CRUISE_CONTROL_ROS_HEADER_TOPIC_INFO_H
 #include <string>
 
-template <typename T>
 class TopicInfo
 {
 public: 
@@ -15,12 +14,12 @@ public:
 	TopicInfo(const TopicInfo&) = default;
 	TopicInfo& operator=(const TopicInfo&) = default;
 
-	inline GetTopicName()
+	inline std::string GetTopicName()
 	{
 		return topic_name_;
 	}
 
-	inline T GetQueueSize()
+	inline std::size_t GetQueueSize()
 	{
 		return queue_size_;
 	}

@@ -4,24 +4,26 @@
 #include <functional>
 #include <chrono>
 
-template <typename T>
+
 class DummyRosNode
 {
 public:
-	create_subscription(std::string name, std::size_t queue_size, 
+	template <class T>
+	T create_subscription(std::string name, std::size_t queue_size, 
 											std::function<void(T)>)
 	{
-
+		return T
 	}
 
-	create_publisher(std::string name, std::size_t queue_size)
+	int create_publisher(std::string name, std::size_t queue_size)
 	{
-
+		return 0;
 	}
 
-	create_wall_timer(std::chrono::milliseconds ms, std::function<void(T)>)
+	template <class T>
+	T create_wall_timer(std::chrono::milliseconds ms, std::function<void(T)>)
 	{
-
+		return T
 	}
 
 };
