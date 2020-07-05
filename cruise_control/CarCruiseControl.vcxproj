@@ -147,11 +147,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="application\header\cruise_manager.cpp" />
     <ClCompile Include="CarCruiseControl.cpp" />
     <ClCompile Include="node1\src\node1.cpp" />
     <ClCompile Include="node2\src\node2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="algorithm\header\concrete_startegy_decorator.h" />
+    <ClInclude Include="algorithm\header\basic_cruise_control.h" />
+    <ClInclude Include="algorithm\header\ICruiseStartegy.h" />
+    <ClInclude Include="algorithm\header\jerk_control_decorator.h" />
+    <ClInclude Include="application\header\configurable_parameters.h" />
+    <ClInclude Include="application\header\cruise_manager.h" />
     <ClInclude Include="node1\header\node1.h" />
     <ClInclude Include="node2\header\node2.h" />
     <ClInclude Include="ros\header\dummy_ros_node.h" />
