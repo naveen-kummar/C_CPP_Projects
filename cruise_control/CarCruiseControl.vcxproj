@@ -155,6 +155,7 @@
     <ClInclude Include="node1\header\node1.h" />
     <ClInclude Include="node2\header\node2.h" />
     <ClInclude Include="ros\header\dummy_ros_node.h" />
+    <ClInclude Include="ros\header\publisher.h" />
     <ClInclude Include="ros\header\topic_info.h" />
     <ClInclude Include="ros\header\ros.h" />
     <ClInclude Include="ros\header\ros_queue.h" />
