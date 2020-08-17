@@ -59,12 +59,13 @@ __8E415D87_xatomic@h DB 01H
 msvcjmc	ENDS
 PUBLIC	?__empty_global_delete@@YAXPAX@Z		; __empty_global_delete
 PUBLIC	?__empty_global_delete@@YAXPAXI@Z		; __empty_global_delete
+PUBLIC	??$Max@D@@YADDD@Z				; Max<char>
 PUBLIC	_main
 PUBLIC	??$Max@M@@YAMMM@Z				; Max<float>
 PUBLIC	??$endl@DU?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@@Z ; std::endl<char,std::char_traits<char> >
 PUBLIC	??$Max@H@@YAHHH@Z				; Max<int>
 PUBLIC	__JustMyCode_Default
-PUBLIC	__real@40600000
+PUBLIC	__real@40400000
 PUBLIC	__real@41066666
 EXTRN	__imp__getchar:PROC
 EXTRN	__imp_?widen@?$basic_ios@DU?$char_traits@D@std@@@std@@QBEDD@Z:PROC
@@ -83,9 +84,9 @@ EXTRN	__fltused:DWORD
 CONST	SEGMENT
 __real@41066666 DD 041066666r			; 8.4
 CONST	ENDS
-;	COMDAT __real@40600000
+;	COMDAT __real@40400000
 CONST	SEGMENT
-__real@40600000 DD 040600000r			; 3.5
+__real@40400000 DD 040400000r			; 3
 CONST	ENDS
 ;	COMDAT rtc$TMZ
 rtc$TMZ	SEGMENT
@@ -278,38 +279,41 @@ _TEXT	ENDS
 ; File D:\WorkBench\C_C++\C_CPP_Projects\template_workout\template_umar_lone\template_umar_lone\1_basic_template.cpp
 ;	COMDAT _main
 _TEXT	SEGMENT
+_pfn$ = -32						; size = 4
 _num2$ = -20						; size = 4
 _num$ = -8						; size = 4
 _main	PROC						; COMDAT
 
-; 13   : {
+; 15   : {
 
 	push	ebp
 	mov	ebp, esp
-	sub	esp, 216				; 000000d8H
+	sub	esp, 228				; 000000e4H
 	push	ebx
 	push	esi
 	push	edi
-	lea	edi, DWORD PTR [ebp-216]
-	mov	ecx, 54					; 00000036H
+	lea	edi, DWORD PTR [ebp-228]
+	mov	ecx, 57					; 00000039H
 	mov	eax, -858993460				; ccccccccH
 	rep stosd
 	mov	ecx, OFFSET __057C14A8_1_basic_template@cpp
 	call	@__CheckForDebuggerJustMyCode@4
 
-; 14   :     auto num = Max(3.5f, 8.4f);
+; 16   :     //auto num = Max(3.4, 8.4f); //Both Parameters should be same type
+; 17   :     //auto num = Max(static_cast<float>(3), 8.4f);//Use explicit casting if argument is of different type
+; 18   :     auto num = Max<float>(3, 8.4f); //Skip argument deduction by explicitly specifying the type to avoid the error
 
 	push	ecx
 	movss	xmm0, DWORD PTR __real@41066666
 	movss	DWORD PTR [esp], xmm0
 	push	ecx
-	movss	xmm0, DWORD PTR __real@40600000
+	movss	xmm0, DWORD PTR __real@40400000
 	movss	DWORD PTR [esp], xmm0
 	call	??$Max@M@@YAMMM@Z			; Max<float>
 	add	esp, 8
 	fstp	DWORD PTR _num$[ebp]
 
-; 15   :     std::cout << num << std::endl;
+; 19   :     std::cout << num << std::endl;
 
 	mov	esi, esp
 	push	OFFSET ??$endl@DU?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@@Z ; std::endl<char,std::char_traits<char> >
@@ -326,8 +330,8 @@ _main	PROC						; COMDAT
 	cmp	esi, esp
 	call	__RTC_CheckEsp
 
-; 16   : 
-; 17   :     auto num2 = Max(38, 12);
+; 20   : 
+; 21   :     auto num2 = Max(38, 12);
 
 	push	12					; 0000000cH
 	push	38					; 00000026H
@@ -335,7 +339,7 @@ _main	PROC						; COMDAT
 	add	esp, 8
 	mov	DWORD PTR _num2$[ebp], eax
 
-; 18   :     std::cout << num2 << std::endl;
+; 22   :     std::cout << num2 << std::endl;
 
 	mov	esi, esp
 	push	OFFSET ??$endl@DU?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@@Z ; std::endl<char,std::char_traits<char> >
@@ -351,31 +355,88 @@ _main	PROC						; COMDAT
 	cmp	esi, esp
 	call	__RTC_CheckEsp
 
-; 19   : 
-; 20   :     getchar();
+; 23   : 
+; 24   :     int (*pfn)(int, int) = Max;
+
+	mov	DWORD PTR _pfn$[ebp], OFFSET ??$Max@H@@YAHHH@Z ; Max<int>
+
+; 25   : 
+; 26   :     getchar();
 
 	mov	esi, esp
 	call	DWORD PTR __imp__getchar
 	cmp	esi, esp
 	call	__RTC_CheckEsp
 
-; 21   : 
-; 22   :     return 0;
+; 27   : 
+; 28   :     return 0;
 
 	xor	eax, eax
 
-; 23   : }
+; 29   : }
 
 	pop	edi
 	pop	esi
 	pop	ebx
-	add	esp, 216				; 000000d8H
+	add	esp, 228				; 000000e4H
 	cmp	ebp, esp
 	call	__RTC_CheckEsp
 	mov	esp, ebp
 	pop	ebp
 	ret	0
 _main	ENDP
+_TEXT	ENDS
+; Function compile flags: /Odtp /RTCsu /ZI
+; File D:\WorkBench\C_C++\C_CPP_Projects\template_workout\template_umar_lone\template_umar_lone\1_basic_template.cpp
+;	COMDAT ??$Max@D@@YADDD@Z
+_TEXT	SEGMENT
+tv67 = -193						; size = 1
+_X$ = 8							; size = 1
+_Y$ = 12						; size = 1
+??$Max@D@@YADDD@Z PROC					; Max<char>, COMDAT
+
+; 8    : {
+
+	push	ebp
+	mov	ebp, esp
+	sub	esp, 196				; 000000c4H
+	push	ebx
+	push	esi
+	push	edi
+	lea	edi, DWORD PTR [ebp-196]
+	mov	ecx, 49					; 00000031H
+	mov	eax, -858993460				; ccccccccH
+	rep stosd
+	mov	ecx, OFFSET __057C14A8_1_basic_template@cpp
+	call	@__CheckForDebuggerJustMyCode@4
+
+; 9    :     return X > Y ? X : Y;
+
+	movsx	eax, BYTE PTR _X$[ebp]
+	movsx	ecx, BYTE PTR _Y$[ebp]
+	cmp	eax, ecx
+	jle	SHORT $LN3@Max
+	mov	dl, BYTE PTR _X$[ebp]
+	mov	BYTE PTR tv67[ebp], dl
+	jmp	SHORT $LN4@Max
+$LN3@Max:
+	mov	al, BYTE PTR _Y$[ebp]
+	mov	BYTE PTR tv67[ebp], al
+$LN4@Max:
+	mov	al, BYTE PTR tv67[ebp]
+
+; 10   : }
+
+	pop	edi
+	pop	esi
+	pop	ebx
+	add	esp, 196				; 000000c4H
+	cmp	ebp, esp
+	call	__RTC_CheckEsp
+	mov	esp, ebp
+	pop	ebp
+	ret	0
+??$Max@D@@YADDD@Z ENDP					; Max<char>
 _TEXT	ENDS
 ; Function compile flags: /Odtp /RTCsu /ZI
 ; File D:\WorkBench\C_C++\C_CPP_Projects\template_workout\template_umar_lone\template_umar_lone\1_basic_template.cpp
