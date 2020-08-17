@@ -36,4 +36,5 @@
 *.filters
 *.vs
 *.exe
+*.asm
 */Debug/*
