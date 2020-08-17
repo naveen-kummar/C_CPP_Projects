@@ -1,0 +1,9 @@
+#ifndef CRUISE_CONTROL_ALGORITHM_HEADER_I_CRUISE_STARTEGY_H
+#define CRUISE_CONTROL_ALGORITHM_HEADER_I_CRUISE_STARTEGY_H
+
+class ICruiseStartegy
+{
+public:
+	virtual float GetAcceleration(float speed) = 0;
+};
+#endif // CRUISE_CONTROL_ALGORITHM_HEADER_I_CRUISE_STARTEGY_H
