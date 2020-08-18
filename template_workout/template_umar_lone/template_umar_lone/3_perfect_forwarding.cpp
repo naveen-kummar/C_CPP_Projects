@@ -118,7 +118,7 @@ Employee* Create(T1&& a, T2&& b) {
 	return new Employee(std::forward<T1>(a), std::forward<T2>(b));
 }
 
-int main()
+int main3()
 {
 	std::cout << "Inside Main ...." << std::endl  << std::endl;
 
