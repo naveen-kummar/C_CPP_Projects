@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 
 template<int size>
@@ -32,7 +33,7 @@ T Sum2(T (&parr)[size])
 	return sum;
 }
 
-int main()
+int main2()
 {
 	//Print<3>(); //OK
 
@@ -53,9 +54,11 @@ int main()
 
 	std::cout << sum1 << std::endl;
 
-	int sum1 = Sum2(arr); //See the beauty once size is made as non-type argument.
+	int sum2 = Sum2(arr); //See the beauty once size is made as non-type argument.
 						  //Then no need to pass the size explicitly.
 						  //This same concept in STL’s std::begin(v) and std::end(v)
+
+
 
 
 	getchar();
