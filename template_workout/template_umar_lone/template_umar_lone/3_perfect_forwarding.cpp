@@ -115,8 +115,11 @@ public:
 
 int main()
 {
+	std::cout << "Inside Main ...." << std::endl;
+
 	Employee emp1{ "Naveen", 100 }; //Calls copy ctor of Interger by but with step-3 move ctor will be called
 
+	std::cout << "Step 4 ...." << std::endl;
 	//Step-4
 	const std::string str = "Naveen";
 	Employee emp2{ str, 100 }; //But this will call default ctor of Employee and copy ctor of Integer
@@ -127,13 +130,21 @@ int main()
 	//> So to handle this we need to put 4 ctors in Employee class
 	//(R, R), (R,L), (L,R) and (L,L). Which is crazy 
 
+	std::cout << "Step 6 ...." << std::endl;
 	//Step-6
-	Employee emp3{ str, Integer(100) };
+	Employee emp3{ str, Integer(100) }; //This will call Move ctor of Integer...
 	//Above code still calls copy ctor of Integer though the templatizied ctor is called
 
 	//Though in ctor signature of templatized ctor we are passing 'Integer(100)' as 
 	//R-Value reference but it is copied to m_Id via ‘id’ directly without std::move
 	//(i.e. L-Value) so Copy ctor is called.
+
+	//Step-7
+	std::cout << "Step 7 ...." << std::endl;
+
+	Integer l_value{ Integer(100) };
+
+	Employee emp4{ str, l_value }; //This will call copy ctor of Integer
 
 	getchar();
 	return 0;
