@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 class Integer {
 	int* m_pInt;
@@ -47,6 +48,25 @@ public:
 		m_Name{ name },
 		m_Id{ id } {
 		std::cout << "Employee(const std::string &name, const Integer &id)" << std::endl; 
+	}
+
+//Step-2 - Added below ctor to call move ctor of Integer but it will not
+	//> The reason is that when you use Temp name it becomes L-Value and copy ctor is called.
+	//> so to make it as R - Vale use std::move() as below
+/*
+	Employee(const std::string&& name, const Integer&& id) :
+		m_Name{ name },
+		m_Id{ id } {
+		std::cout << "Employee(const std::string &&name, const Integer &&id)" << std::endl;
+	}
+*/
+
+	//Step-3 Use std::move to call move ctor of Integer and ensure to 
+	//remove const of input parameter
+	Employee(std::string&& name, Integer&& id) :
+		m_Name{ name },
+		m_Id{ std::move(id) } {
+		std::cout << "Employee(const std::string &&name, const Integer &&id)" << std::endl;
 	}
 
 };
