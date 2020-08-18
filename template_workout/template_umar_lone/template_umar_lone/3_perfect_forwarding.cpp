@@ -113,13 +113,18 @@ public:
 
 };
 
+template<typename T1, typename T2>
+Employee* Create(T1&& a, T2&& b) {
+	return new Employee(std::forward<T1>(a), std::forward<T2>(b));
+}
+
 int main()
 {
-	std::cout << "Inside Main ...." << std::endl;
+	std::cout << "Inside Main ...." << std::endl  << std::endl;
 
 	Employee emp1{ "Naveen", 100 }; //Calls copy ctor of Interger by but with step-3 move ctor will be called
 
-	std::cout << "Step 4 ...." << std::endl;
+	std::cout << "Step 4 ...." << std::endl << std::endl;
 	//Step-4
 	const std::string str = "Naveen";
 	Employee emp2{ str, 100 }; //But this will call default ctor of Employee and copy ctor of Integer
@@ -130,7 +135,7 @@ int main()
 	//> So to handle this we need to put 4 ctors in Employee class
 	//(R, R), (R,L), (L,R) and (L,L). Which is crazy 
 
-	std::cout << "Step 6 ...." << std::endl;
+	std::cout << "Step 6 ...." <<  std::endl << std::endl;
 	//Step-6
 	Employee emp3{ str, Integer(100) }; //This will call Move ctor of Integer...
 	//Above code still calls copy ctor of Integer though the templatizied ctor is called
@@ -140,11 +145,31 @@ int main()
 	//(i.e. L-Value) so Copy ctor is called.
 
 	//Step-7
-	std::cout << "Step 7 ...." << std::endl;
+	std::cout << "Step 7 ...." << std::endl << std::endl;
 
 	Integer l_value{ Integer(100) };
 
 	Employee emp4{ str, l_value }; //This will call copy ctor of Integer
+
+	//Step-8
+	std::cout << "Step 8 ...." << std::endl << std::endl;
+
+	auto emp8 = Create("Naveen", Integer{ 100 }); //(R, R)
+
+	//Step-9
+	std::cout << "Step 9 ...." << std::endl << std::endl;
+
+	auto emp9 = Create(str, Integer{ 100 }); //(L, R)
+
+	//Step-10
+	std::cout << "Step 10 ...." << std::endl << std::endl;
+
+	auto emp10 = Create("Naveen",l_value); //(R, L)
+
+	//Step-11
+	std::cout << "Step 11 ...." << std::endl << std::endl;
+
+	auto emp11 = Create(str, l_value); //(L, L)
 
 	getchar();
 	return 0;
