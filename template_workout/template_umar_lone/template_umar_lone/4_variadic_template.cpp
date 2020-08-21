@@ -89,7 +89,7 @@ void PrintV(T &&a, Params&&... args) //Ste 4- Copying is skipped and the move to
 
 
 
-int main()
+int main4()
 {
 	//Print({ 1, 2, 3, 4 }); //0k
 	//Print({ 1, 2, 3, 4, 5.4f }); //Error - In-Compatible types 
