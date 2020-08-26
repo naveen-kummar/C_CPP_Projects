@@ -154,6 +154,11 @@
     <ClCompile Include="3_perfect_forwarding.cpp" />
     <ClCompile Include="4_variadic_template.cpp" />
     <ClCompile Include="5_decltype_and_auto_demo.cpp" />
+    <ClCompile Include="6_extern_template_source1.cpp" />
+    <ClCompile Include="6_extern_template_source2.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="6_extern_template.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

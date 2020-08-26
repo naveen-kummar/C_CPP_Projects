@@ -135,8 +135,7 @@ int main5()
 	client_factory->PaintButton();
 	client_factory->PaintCheckBox();
 
-	int temp{};
-	cin >> temp;
+	getchar();
 
 	return 0;
 }

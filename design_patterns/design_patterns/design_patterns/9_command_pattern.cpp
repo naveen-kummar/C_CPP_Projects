@@ -215,7 +215,7 @@ public:
 	//}
 };
 
-int main()
+int main9()
 {
 	return 0;
 }

@@ -147,6 +147,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="10_proxy_lazybitmap.cpp" />
+    <ClCompile Include="12_proxy_pattern_security.cpp" />
+    <ClCompile Include="11_proxy_smart_pointer.cpp" />
     <ClCompile Include="1_design_patterns.cpp" />
     <ClCompile Include="2_test_code.cpp" />
     <ClCompile Include="3_startegy_pattern.cpp" />
