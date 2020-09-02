@@ -147,7 +147,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="threads_demo.cpp" />
+    <ClCompile Include="1_threads_demo.cpp" />
+    <ClCompile Include="2_thread_vs_process.cpp" />
+    <ClCompile Include="3_asynch_usage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

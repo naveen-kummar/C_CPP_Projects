@@ -147,15 +147,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BFS_Graph.cpp" />
-    <ClCompile Include="chess_board_knight.cpp" />
-    <ClCompile Include="chess_board_knight_dynamic_approach.cpp" />
-    <ClCompile Include="city_library.cpp" />
-    <ClCompile Include="DFS_Graph.cpp" />
-    <ClCompile Include="hacker_rank_cpp.cpp" />
-    <ClCompile Include="queen_attack.cpp" />
-    <ClCompile Include="sharing_queue_among_three_threads.cpp" />
-    <ClCompile Include="test_code.cpp" />
+    <ClCompile Include="5_BFS_Graph.cpp" />
+    <ClCompile Include="3_chess_board_knight.cpp" />
+    <ClCompile Include="4_chess_board_knight_dynamic_approach.cpp" />
+    <ClCompile Include="2_city_library.cpp" />
+    <ClCompile Include="6_DFS_Graph.cpp" />
+    <ClCompile Include="1_hacker_rank_cpp.cpp" />
+    <ClCompile Include="8_queen_attack.cpp" />
+    <ClCompile Include="7_sharing_queue_among_three_threads.cpp" />
+    <ClCompile Include="9_number_of_jump_steps.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

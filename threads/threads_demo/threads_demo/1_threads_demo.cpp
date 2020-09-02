@@ -39,7 +39,7 @@ void FindOdd(std::promise<ull>&& OddSumPromise  ,ull start, ull end)
     OddSumPromise.set_value(odd_sum);
 }
 
-int main()
+int main1()
 {
     ull start{ 0 };
     ull end{ 1900000000 };
