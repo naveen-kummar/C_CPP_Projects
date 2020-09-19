@@ -54,10 +54,11 @@ struct friend_data
             int link_circle_count = fr->count;
             if (fr->pNext != nullptr)
             {
-                link_circle_id = fr->pNext->circle_id;
-                link_circle_count = fr->pNext->count;
+
                 while (fr->pNext != nullptr)
                 {
+                    link_circle_id = fr->pNext->circle_id;
+                    link_circle_count = fr->pNext->count;
                     if (fr->pNext == nullptr)
                     {
                         break;
