@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="10_friends_circle_sets_and_map.cpp" />
     <ClCompile Include="5_BFS_Graph.cpp" />
     <ClCompile Include="3_chess_board_knight.cpp" />
     <ClCompile Include="4_chess_board_knight_dynamic_approach.cpp" />

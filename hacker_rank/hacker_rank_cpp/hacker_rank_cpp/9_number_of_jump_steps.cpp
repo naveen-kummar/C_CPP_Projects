@@ -101,7 +101,7 @@ unsigned long long CountPathIterativeApproach(int steps)
 
 }
 
-int main()
+int main9()
 {
 	///////////////////////////////Recursion Approach/////////////////////////////
 	int recursive{ 10};
@@ -157,4 +157,6 @@ int main()
 
 
 	getchar();
+
+	return 0;
 }
